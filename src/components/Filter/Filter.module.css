@@ -1,0 +1,21 @@
+.filterLabel {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.filterName {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  font-size: 18px;
+
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+@media screen and (min-width: 768px) {
+  .filterName {
+    width: 400px;
+  }
+}

@@ -1,0 +1,39 @@
+.contactList {
+  padding: 0;
+}
+
+.contactListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.contactListItemBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 5px;
+  background-color: #36a6de;
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  height: 36px;
+  min-width: 140px;
+  transition: transform 250ms linear, box-shadow 250ms linear;
+  cursor: pointer;
+  padding: 0 15px;
+  margin-left: 20px;
+}
+
+.contactListItemBtn:hover,
+.contactListItemBtn:focus {
+  background-color: #1777a8;
+  transform: translateY(-0.25rem);
+  box-shadow: 0rem 0.25rem 0.75rem rgb(30 34 40 / 15%);
+  transition: background-color 250ms linear, transform 250ms linear;
+}

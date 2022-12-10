@@ -1,0 +1,52 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+}
+
+.formLabel {
+  margin-bottom: 10px;
+}
+
+.formName,
+.formNumber {
+  font-size: 18px;
+  padding: 15px;
+  width: 300px;
+  margin-bottom: 15px;
+}
+
+@media screen and (min-width: 768px) {
+  .formName,
+  .formNumber {
+    width: 400px;
+  }
+}
+  
+
+.formBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 5px;
+  background-color: #36a6de;
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  height: 48px;
+  min-width: 140px;
+  transition: transform 250ms linear, box-shadow 250ms linear;
+  cursor: pointer;
+  padding: 0 15px;
+}
+
+.formBtn:hover,
+.formBtn:focus {
+  background-color: #1777a8;
+  transform: translateY(-0.25rem);
+  box-shadow: 0rem 0.25rem 0.75rem rgb(30 34 40 / 15%);
+  transition: background-color 250ms linear, transform 250ms linear;
+}
