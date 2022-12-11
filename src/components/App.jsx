@@ -1,69 +1,79 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 
-export const App = () => {
+export function App() {
   const [contacts, setContacts] = useState([
     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ]);
-
-  const [firstRenderFlag, setFlag] = useState(true);
-
   const [filter, setFilter] = useState('');
-  useEffect(() => {}, []);
 
+  // проверка localStorage на наличие контактов
   useEffect(() => {
-    if (firstRenderFlag) {
-      const contactsFromLocalStorage = localStorage.getItem('contactList');
+    const contactsStorage = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contactsStorage);
 
-      if (contactsFromLocalStorage !== 'undefined') {
-        const parsedContacts = JSON.parse(contactsFromLocalStorage);
-
-        if (parsedContacts) {
-          setContacts(parsedContacts);
-        }
-      }
-      setFlag(false);
+    if (parsedContacts) {
+      setContacts(parsedContacts);
     } else {
-      localStorage.setItem('contactList', JSON.stringify(contacts));
+      return;
     }
-  }, [contacts, firstRenderFlag]);
+  }, []);
 
-  const handleChange = e => {
-    const { value } = e.target;
-    setFilter(value);
-  };
+  // запись контакта в localStorage
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
-  const handleSubmit = e => {
-    const id = nanoid();
-    const name = e.name;
-    const number = e.number;
-    const contactsLists = [...contacts];
-
-    if (contactsLists.findIndex(contact => name === contact.name) !== -1) {
-      alert(`${name} is already in contacts.`);
-    } else {
-      contactsLists.push({ id, name, number });
+  // добавляет контакт в список
+  const addContact = ({ name, number }) => {
+    const findName = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (findName) {
+      return alert(`${name} is already in contacts.`);
     }
 
-    setContacts(contactsLists);
+    const findNumber = contacts.find(contact => contact.number === number);
+    if (findNumber) {
+      return alert(`This phone number is already in use.`);
+    }
+
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    setContacts(contacts => [...contacts, newContact]);
   };
 
-  const handleDelete = e => {
-    setContacts(contacts.filter(contact => contact.id !== e));
+  // удаляет контакта из списка
+  const deleteContact = contactId => {
+    setContacts(contacts =>
+      contacts.filter(contact => contact.id !== contactId)
+    );
   };
 
-  const getFilteredContacts = () => {
-    const filterContactsList = contacts.filter(contact => {
-      return contact.name.toLowerCase().includes(filter.toLowerCase());
-    });
-    return filterContactsList;
+  const handleFilter = e => {
+    setFilter(e.currentTarget.value);
   };
+
+  // возвращает результат фильтра
+  const filterContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  const visibleContacts = filterContacts();
+
 
   return (
     <div
@@ -80,12 +90,12 @@ export const App = () => {
       }}
     >
       <h1> 📖 Phonebook</h1>
-      <ContactForm handleSubmit={handleSubmit} />
+      <ContactForm onSubmit={addContact} />
       <h2> Contacts</h2>
-      <Filter filter={filter} handleChange={handleChange} />
+      <Filter filter={filter} onChange={handleFilter} />
       <ContactList
-        contacts={getFilteredContacts()}
-        handleDelete={handleDelete}
+        contacts={visibleContacts}
+        onDeleteContact={deleteContact}
       />
     </div>
   );
